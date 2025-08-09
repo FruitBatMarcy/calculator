@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -22,9 +22,14 @@ public class Calculator extends JFrame implements ActionListener{
     JButton[] numButtons = new JButton[9]; 
     JButton[] funcButtons = new JButton[4];
     JButton[] zeButtons = new JButton[2];
+    //JButton[] cdButtons = new JButton[2]; 
     JTextField textField;
     JPanel numPanel, textPanel, funcPanel, zePanel;
-    String txt = "waow";
+
+    boolean newNumberFlag = false;
+    String txt = "";
+    int num1, num2;
+    int inp = -1;
 
     public Calculator(){
 
@@ -65,11 +70,13 @@ public class Calculator extends JFrame implements ActionListener{
         zePanel.setBounds(0,200,150,50);
 
         // --- text panel ---
-        textPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+        textPanel = new JPanel();
         textField = new JTextField();
         textField.setFont(new Font(null,Font.PLAIN, 25));
         textField.setText(txt);
         textField.setEditable(false);
+        textField.setHorizontalAlignment(JTextField.TRAILING);
+        textField.setPreferredSize(new Dimension(200,50));
         textPanel.add(textField);
         textPanel.setBounds(0,0,200,50);
 
@@ -86,11 +93,156 @@ public class Calculator extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        if(newNumberFlag){
+            txt = ""; 
+            newNumberFlag = false;
+        }
+
+        // --- number buttons ---
         if(e.getSource() == numButtons[0]){
-            txt += "1";
+            txt += "1";            
+            textField.setText(txt);
+            return;
+        }
+        if(e.getSource() == numButtons[1]){
+            txt += "2";           
+            textField.setText(txt); 
+            return;
+        }
+        if(e.getSource() == numButtons[2]){
+            txt += "3";        
+            textField.setText(txt);    
+            return;
+        }
+        if(e.getSource() == numButtons[3]){
+            txt += "4";          
+            textField.setText(txt);  
+            return;
+        }
+        if(e.getSource() == numButtons[4]){
+            txt += "5";        
+            textField.setText(txt);    
+            return;
+        }
+        if(e.getSource() == numButtons[5]){
+            txt += "6";      
+            textField.setText(txt);      
+            return;
+        }
+        if(e.getSource() == numButtons[6]){
+            txt += "7";       
+            textField.setText(txt);     
+            return;
+        }
+        if(e.getSource() == numButtons[7]){
+            txt += "8";         
+            textField.setText(txt);   
+            return;
+        }
+        if(e.getSource() == numButtons[8]){
+            txt += "9";     
+            textField.setText(txt);       
+            return;
+        }
+
+        // --- zero and equals ---
+        if(e.getSource()==zeButtons[0]){
+            txt += "0";
+            textField.setText(txt);
+            return;
+        }
+        if(e.getSource()==zeButtons[1]){
+            calculate();
+            newNumberFlag = true;
+            inp = -1;
+            return;
+        }
+
+
+        // --- function buttons ---
+
+        // --- addition ---
+        if(e.getSource()==funcButtons[0]){
+            if(inp == -1){
+                num1 = Integer.parseInt(txt);
+                inp = 0;
+                newNumberFlag = true;
+            }
+            else{
+                calculate();
+                inp = 0;
+                newNumberFlag = true;
+            }
+            return;
+        }
+        // --- subtraction ---
+        if(e.getSource()==funcButtons[1]){
+            if(inp == -1){
+                num1 = Integer.parseInt(txt);
+                inp = 1;
+                newNumberFlag = true;
+            }
+            else{
+                calculate();
+                inp = 1;
+                newNumberFlag = true;
+            }
+            return;
+        }
+        // --- multiplication ---
+        if(e.getSource()==funcButtons[2]){
+            if(inp == -1){
+                num1 = Integer.parseInt(txt);
+                inp = 2;
+                newNumberFlag = true;
+            }
+            else{
+                calculate();
+                inp = 2;
+                newNumberFlag = true;
+            }
+            return;
+        }
+        // --- division ---
+        if(e.getSource()==funcButtons[3]){
+            if(inp == -1){
+                num1 = Integer.parseInt(txt);
+                inp = 3;
+                newNumberFlag = true;
+            }
+            else{
+                calculate();
+                inp = 3;
+                newNumberFlag = true;
+            }
             return;
         }
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
+
+    private void calculate() {
+        num2 = Integer.parseInt(txt);
+        switch (inp) {
+            case 0:                
+                num1 = num1 + num2;
+                txt = Integer.toString(num1);
+                textField.setText(txt);
+                break;
+            case 1:
+                num1 = num1 - num2;
+                break;
+            case 2:
+                num1 = num1 * num2;
+                break;
+            case 3:
+                num1 = num1/num2;
+                break;
+            default:
+                break;
+        }
+        txt = Integer.toString(num1);
+        textField.setText(txt);
     }
 
 }
